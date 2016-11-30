@@ -121,5 +121,12 @@ function _delete_group_by_id($groupID) {
     1 => array($groupID, 'Integer'),
   );
   CRM_Core_DAO::executeQuery($sql, $sqlParams);
+
+  // last but not least, delete the group
+  $sql = "delete from civicrm_group where id = %1";
+  $sqlParams = array(
+    1 => array($groupID, 'Integer'),
+  );
+  CRM_Core_DAO::executeQuery($sql, $sqlParams);
 }
 
