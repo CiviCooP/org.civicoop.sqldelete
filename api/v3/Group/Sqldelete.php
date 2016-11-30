@@ -25,20 +25,31 @@ function civicrm_api3_group_sqldelete($params) {
   try {
     // check if param group_id is specified
     if (!array_key_exists('group_id', $params)) {
-      throw new Exception('group_id is a required parameter.');
+      throw new Exception('group_id is a required parameter. Can be a single id or a comma separated list of id\'s.');
     }
 
-    // check if it's an integer
-    $groupID = (int)$params['group_id'];
-    if ($groupID != $params['group_id']) {
-      throw new Exception('group_id must be an integer.');
+    $returnValues = '';
+    $i = 0;
+
+    // get the id's
+    $groupIDs = explode(',', $params['group_id']);
+
+    foreach ($groupIDs as $g) {
+      // check if it's an integer
+      $groupID = trim($g);
+      if (!is_numeric($groupID)) {
+        // skip record
+        $returnValues .= "skipped group $g: not an integer, ";
+        continue;
+      }
+
+      // delete the group
+      _delete_group_by_id($groupID);
+      $i++;
     }
 
-    // delete the group
-    _delete_group_by_id($groupID);
-
-    $returnValues = array("Group with ID = $groupID is deleted.");
-    return civicrm_api3_create_success($returnValues, $params, NULL, NULL);
+    $returnValues .= "$i group(s) deleted.";
+    return civicrm_api3_create_success(array($returnValues), $params, NULL, NULL);
   }
   catch (Exception $e) {
     throw new API_Exception($e->getMessage(), 999);
