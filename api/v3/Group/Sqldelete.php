@@ -57,18 +57,6 @@ function civicrm_api3_group_sqldelete($params) {
 }
 
 function _delete_group_by_id($groupID) {
-  // select all the children of this group
-  $sql = "select * from civicrm_group_nesting where parent_group_id = %1";
-  $sqlParams = array(
-    1 => array($groupID, 'Integer'),
-  );
-  $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
-
-  // delete all child groups first
-  while ($dao->fetch()) {
-    _delete_group_by_id($dao->child_group_id);
-  }
-
   // get the group with that ID
   $sql = "select * from civicrm_group where id = %1";
   $sqlParams = array(
@@ -76,12 +64,8 @@ function _delete_group_by_id($groupID) {
   );
   $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
 
-  // check if the group exists
-  if ($dao->N > 0) {
-    // get the record
-    $dao->fetch();
-
-    // delete saved search
+  if ($dao->fetch()) {
+    // delete saved search (if available)
     if ($dao->saved_search_id) {
       $sql = "delete from civicrm_saved_search where id = %1";
       $sqlParams = array(

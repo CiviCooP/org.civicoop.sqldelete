@@ -11,7 +11,7 @@ function sqlgroupdelete_civicrm_post($op, $objectName, $objectId, &$objectRef) {
     );
     civicrm_api3('group', 'sqldelete', $params);
 
-    CRM_Core_Session::setStatus('Groep ', ts('Warning'), 'warning');
+    CRM_Core_Session::setStatus('Groep opgeschoond.', ts('Warning'), 'warning');
   }
 }
 
