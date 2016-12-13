@@ -8,7 +8,7 @@ function sqlgroupdelete_civicrm_pre($op, $objectName, $id, &$params) {
     // get the saved search id of this group
     $sql = "select saved_search_id from civicrm_group where id = %1";
     $sqlParams = array(
-      1 => array($groupID, 'Integer'),
+      1 => array($id, 'Integer'),
     );
     $savedSearchID = CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
 
