@@ -5,7 +5,13 @@ require_once 'sqlgroupdelete.civix.php';
 
 function sqlgroupdelete_civicrm_post($op, $objectName, $objectId, &$objectRef) {
   if ($op == 'delete' && $objectName == 'Group') {
-    CRM_Core_Session::setStatus('TEST ALAIN!!!', ts('Warning'), 'warning');
+    // call our api to make sure everything of the group is deleted
+    $params = array(
+      'group_id' => $objectId,
+    );
+    civicrm_api3('group', 'sqldelete', $params);
+
+    CRM_Core_Session::setStatus('Groep ', ts('Warning'), 'warning');
   }
 }
 
