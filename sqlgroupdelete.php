@@ -2,6 +2,13 @@
 
 require_once 'sqlgroupdelete.civix.php';
 
+
+function sqlgroupdelete_civicrm_post($op, $objectName, $objectId, &$objectRef) {
+  if ($op == 'delete' && $objectName == 'Group') {
+    CRM_Core_Session::setStatus('TEST ALAIN!!!', ts('Warning'), 'warning');
+  }
+}
+
 /**
  * Implements hook_civicrm_config().
  *
