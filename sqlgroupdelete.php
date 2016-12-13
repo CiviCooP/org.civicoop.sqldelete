@@ -2,6 +2,26 @@
 
 require_once 'sqlgroupdelete.civix.php';
 
+function sqlgroupdelete_civicrm_pre($op, $objectName, $id, &$params) {
+  // delete the saved search
+  if ($op == 'delete' && $objectName == 'Group') {
+    // get the saved search id of this group
+    $sql = "select saved_search_id from civicrm_group where id = %1";
+    $sqlParams = array(
+      1 => array($groupID, 'Integer'),
+    );
+    $savedSearchID = CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
+
+    // delete saved search (if available)
+    if ($savedSearchID) {
+      $sql = "delete from civicrm_saved_search where id = %1";
+      $sqlParams = array(
+        1 => array($savedSearchID, 'Integer'),
+      );
+      CRM_Core_DAO::executeQuery($sql, $sqlParams);
+    }
+  }
+}
 
 function sqlgroupdelete_civicrm_post($op, $objectName, $objectId, &$objectRef) {
   if ($op == 'delete' && $objectName == 'Group') {

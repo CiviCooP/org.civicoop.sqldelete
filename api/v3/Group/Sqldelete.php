@@ -57,7 +57,8 @@ function civicrm_api3_group_sqldelete($params) {
 }
 
 function _delete_group_by_id($groupID) {
-  // get the saved search id of this group
+  // get the saved search id of this group (the code below is duplicated in the pre hook because when
+  // a group is deleted using the interface, the group is already gone by the time we are here)
   $sql = "select saved_search_id from civicrm_group where id = %1";
   $sqlParams = array(
     1 => array($groupID, 'Integer'),
