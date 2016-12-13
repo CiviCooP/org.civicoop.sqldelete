@@ -57,22 +57,20 @@ function civicrm_api3_group_sqldelete($params) {
 }
 
 function _delete_group_by_id($groupID) {
-  // get the group with that ID
-  $sql = "select * from civicrm_group where id = %1";
+  // get the saved search id of this group
+  $sql = "select saved_search_id from civicrm_group where id = %1";
   $sqlParams = array(
     1 => array($groupID, 'Integer'),
   );
-  $dao = CRM_Core_DAO::executeQuery($sql, $sqlParams);
+  $savedSearchID = CRM_Core_DAO::singleValueQuery($sql, $sqlParams);
 
-  if ($dao->fetch()) {
-    // delete saved search (if available)
-    if ($dao->saved_search_id) {
-      $sql = "delete from civicrm_saved_search where id = %1";
-      $sqlParams = array(
-        1 => array($dao->saved_search_id, 'Integer'),
-      );
-      CRM_Core_DAO::executeQuery($sql, $sqlParams);
-    }
+  // delete saved search (if available)
+  if ($savedSearchID) {
+    $sql = "delete from civicrm_saved_search where id = %1";
+    $sqlParams = array(
+      1 => array($savedSearchID, 'Integer'),
+    );
+    CRM_Core_DAO::executeQuery($sql, $sqlParams);
   }
 
   // delete the group contacts
