@@ -1,0 +1,12 @@
+{
+  "name": "civicoop/org.civicoop.sqlgroupdelete",
+  "description": "Hard delete a CiviCRM group.",
+  "type": "civicrm-module",
+  "authors": [
+    {
+      "name": "Alain Benbassat",
+      "email": "alain@businessandcode.eu"
+    }
+  ],
+  "license": "AGPL-3.0"
+}
